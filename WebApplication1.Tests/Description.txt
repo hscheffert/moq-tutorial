@@ -1,0 +1,22 @@
+Tutorial here: https://softchris.github.io/pages/dotnet-moq.html#full-code
+
+// Create a mock
+var paymentServiceMock = new Mock<IPaymentService>();
+
+Card card = new Card
+{
+    Name = "foo",
+    CardNumber = "bar",
+    ValidTo = DateTime.Today
+};
+
+// Instruct the mock using Setup()
+paymentServiceMock.Setup(x => x.Charge(10.99, card)).Returns(true);
+
+paymentServiceMock.Setup(x => x.Charge(It.IsAny<double>(), card)).Returns(true);
+
+// Mock the card
+var cardMock = new Mock<ICard>();
+// Pass in the cardMock.Object which represents the concrete implementation
+paymentServiceMock.Setup(x => x.Charge(It.IsAny<double>(), cardMock.Object))
+    .Returns(true);
